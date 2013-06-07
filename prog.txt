@@ -1,0 +1,36 @@
+.CODE
+[0x00400024]	0x3c011001  lui $1, 4097                    ; 24: la $sp, 0x10010800	# top of stack (para executar no xspim)
+[0x00400028]	0x343d0800  ori $29, $1, 2048
+[0x0040002c]	0x27bdfffc  addiu $29, $29, -4              ; 28: subu  $sp, $sp, 4 	# stack frame of main is 4 bytes long
+[0x00400030]	0xafbf0000  sw $31, 0($29)                  ; 29: sw  $ra, 0($sp)	 	# save return address
+[0x00400034]	0x3c081001  lui $8, 4097 [x]                ; 35: la $t0, x
+[0x00400038]	0x34100003  ori $16, $0, 3                  ; 36: li $s0, 3
+[0x0040003c]	0xad100000  sw $16, 0($8)                   ; 37: sw $s0, 0($t0)
+[0x00400040]	0x34040005  ori $4, $0, 5                   ; 38: li $a0, 5		# coloca o argumento em $a0
+[0x00400044]	0x0c100019  jal 0x00400064 [fat]            ; 39: jal fat			# invoca fat()
+[0x00400048]	0x00508821  addu $17, $2, $16               ; 40: addu $s1, $v0, $s0
+[0x0040004c]	0x3c011001  lui $1, 4097 [y]                ; 41: la $t0, y
+[0x00400050]	0x34280004  ori $8, $1, 4 [y]
+[0x00400054]	0xad110000  sw $17, 0($8)                   ; 42: sw $s1, 0($t0)
+[0x00400058]	0x8fbf0000  lw $31, 0($29)                  ; 48: lw $ra, 0($sp)		# recarrega o SP
+[0x0040005c]	0x27bd0004  addiu $29, $29, 4               ; 49: addu $sp, $sp,4  	# reposiciona stack pointer
+[0x00400060]	0x04010000  bgez $0 0 [end-0x00400060]      ; 56: b end
+[0x00400064]	0x27bdfff8  addiu $29, $29, -8              ; 64: subu  $sp, $sp, 8 	# salva contexto na pilha
+[0x00400068]	0xafbf0004  sw $31, 4($29)                  ; 65: sw $ra, 4($sp)
+[0x0040006c]	0xafa40000  sw $4, 0($29)                   ; 66: sw $a0, 0($sp)		# salva parametro de entrada na pilha
+[0x00400070]	0x8fa20000  lw $2, 0($29)                   ; 73: lw $2, 0($sp)
+[0x00400074]	0x1c400003  bgtz $2 12 [$L2-0x00400074]     ; 74: bgtz $2, $L2      	# desvia se n > 0
+[0x00400078]	0x34020001  ori $2, $0, 1                   ; 75: li $2, 1	       	# se n <= 0, retorna 1
+[0x0040007c]	0x08100026  j 0x00400098 [$L1]              ; 76: j $L1
+[0x00400080]	0x8fa30000  lw $3, 0($29)                   ; 79: lw $3, 0($sp)   	# n > 0
+[0x00400084]	0x2462ffff  addiu $2, $3, -1                ; 80: subu $2, $3, 1     	# calcula n-1
+[0x00400088]	0x00022021  addu $4, $0, $2                 ; 81: move $a0, $2      	# carrega parametro e executa fat(n-1)
+[0x0040008c]	0x0c100019  jal 0x00400064 [fat]            ; 82: jal fat
+[0x00400090]	0x8fa30000  lw $3, 0($29)                   ; 84: lw $3, 0($sp)           # carrega n e calcula fat(n-1) * n
+[0x00400094]	0x70431002  mul $2, $2, $3                  ; 85: mul  $2, $2, $3
+[0x00400098]	0x8fa40000  lw $4, 0($29)                   ; 91: lw  $a0, 0($sp)	        # recompoe contexto
+[0x0040009c]	0x8fbf0004  lw $31, 4($29)                  ; 92: lw  $ra, 4($sp)	        # resultado esta em $2
+[0x004000a0]	0x27bd0008  addiu $29, $29, 8               ; 93: addu  $sp, $sp, 8
+[0x004000a4]	0x03e00008  jr $31                          ; 94: jr  $ra	       	        # retorna
+.DATA
+[0x10010000]		        0x00000001  0x00000001  0x00000000  0x00000000

@@ -1,0 +1,21 @@
+.CODE
+[0x00400024]	0x34080239  ori $8, $0, 569                 ; 5: ori $t0, $zero, 569 #Resultado 569
+[0x00400028]	0x3509013e  ori $9, $8, 318                 ; 6: ori $t1, $t0, 318 #Resultado 831
+[0x0040002c]	0x01095021  addu $10, $8, $9                ; 7: addu $t2, $t0, $t1 #Resultado 1400
+[0x00400030]	0x3409013e  ori $9, $0, 318                 ; 9: ori $t1, $zero, 318 #Resultado 318
+[0x00400034]	0x01095023  subu $10, $8, $9                ; 8: subu $t2, $t0, $t1 #Resultado 251
+[0x00400038]	0x01095024  and $10, $8, $9                 ; 10: and $t2, $t0, $t1 #Resultado 56
+[0x0040003c]	0x01095025  or $10, $8, $9                  ; 11: or $t2, $t0, $t1 #Resultado 831
+[0x00400040]	0x01095026  xor $10, $8, $9                 ; 12: xor $t2, $t0, $t1 #775
+[0x00400044]	0x01095027  nor $10, $8, $9                 ; 13: nor $t2, $t0, $t1 #Resultado grande
+[0x00400048]	0x3c0a0239  lui $10, 569                    ; 14: lui $t2, 569 #Resultado 37289984
+[0x0040004c]	0x71095002  mul $10, $8, $9                 ; 15: mul $t2, $t0, $t1 #Resultado 180942
+[0x00400050]	0x250a013e  addiu $10, $8, 318              ; 16: addiu $t2, $t0, 318 #Resultado 887
+[0x00400054]	0x08100017  j 0x0040005c [parte]            ; 17: j parte
+[0x00400058]	0x250a013e  addiu $10, $8, 318              ; 18: addiu $t2, $t0, 318 #Resultado 887
+[0x0040005c]	0x0c100019  jal 0x00400064 [baixo]          ; 20: jal baixo
+[0x00400060]	0x08100009  j 0x00400024 [main]             ; 21: j main
+[0x00400064]	0x340b000F  ori $11, $0, 16                 ; 23: ori $t3, $zero, 0 #Modificar aqui para testar o bgtz
+[0x00400068]	0x1d600002  bgtz $11 8 [pulo-0x00400068]    ; 24: bgtz $t3, pulo
+[0x0040006c]	0x340b03e8  ori $11, $0, 1000               ; 25: ori $t3, $zero, 1000
+[0x00400070]	0x03e00008  jr $31                          ; 27: jr $ra
